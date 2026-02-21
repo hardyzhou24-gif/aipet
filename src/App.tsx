@@ -7,19 +7,20 @@ import PetDetail from './components/PetDetail';
 import AdoptionForm from './components/AdoptionForm';
 import Profile from './components/Profile';
 import UploadPet from './components/UploadPet';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/pet/:id" element={<PetDetail />} />
-                    <Route path="/adopt/:id" element={<AdoptionForm />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/upload" element={<UploadPet />} />
+                    <Route path="/pet/:id" element={<ProtectedRoute><PetDetail /></ProtectedRoute>} />
+                    <Route path="/adopt/:id" element={<ProtectedRoute><AdoptionForm /></ProtectedRoute>} />
+                    <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="/upload" element={<ProtectedRoute><UploadPet /></ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
