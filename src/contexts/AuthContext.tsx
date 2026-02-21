@@ -19,75 +19,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Mock get initial session
-        const savedUser = localStorage.getItem('MOCK_CURRENT_USER');
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        }
-        setLoading(false);
+        // Get initial session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const signIn = async (email: string, password: string) => {
-        // 模拟网络延迟
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        const usersStr = localStorage.getItem('MOCK_USERS');
-        const users = usersStr ? JSON.parse(usersStr) : [];
-
-        const existingUser = users.find((u: any) => u.email === email);
-        if (!existingUser) {
-            return { error: 'Invalid login credentials' }; // 模拟未注册
+        try {
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            return { error: error?.message ?? null };
+        } catch (err: any) {
+            console.error('SignIn fetch error:', err);
+            return { error: '网络连接异常，无法连接到验证服务器。请检查您的网络或者代理设置。' };
         }
-
-        if (existingUser.password !== password) {
-            return { error: '账号或密码错误' };
-        }
-
-        const mockUser: User = {
-            id: email, // dummy id
-            email,
-            app_metadata: {},
-            user_metadata: { full_name: existingUser.full_name, phone: existingUser.phone },
-            aud: 'authenticated',
-            created_at: new Date().toISOString()
-        } as any;
-
-        localStorage.setItem('MOCK_CURRENT_USER', JSON.stringify(mockUser));
-        setUser(mockUser);
-        return { error: null };
     };
 
     const signUp = async (email: string, password: string, fullName: string, phone: string) => {
-        // 模拟网络延迟
-        await new Promise(resolve => setTimeout(resolve, 500));
+        try {
+            const data: Record<string, string> = {};
+            if (fullName) data.full_name = fullName;
+            if (phone) data.phone = phone;
 
-        const usersStr = localStorage.getItem('MOCK_USERS');
-        const users = usersStr ? JSON.parse(usersStr) : [];
+            // 只有当存在有效附加信息时才构造 options 对象
+            const hasData = Object.keys(data).length > 0;
 
-        if (users.some((u: any) => u.email === email)) {
-            return { error: '该邮箱已经被注册过了' };
+            const payload: any = { email, password };
+            if (hasData) {
+                payload.options = { data };
+            }
+
+            const { error } = await supabase.auth.signUp(payload);
+            return { error: error?.message ?? null };
+        } catch (err: any) {
+            console.error('SignUp fetch error:', err);
+            return { error: '网络连接异常，无法连接到验证服务器。请检查您的网络或者代理设置。' };
         }
-
-        users.push({ email, password, full_name: fullName, phone });
-        localStorage.setItem('MOCK_USERS', JSON.stringify(users));
-
-        const mockUser: User = {
-            id: email,
-            email,
-            app_metadata: {},
-            user_metadata: { full_name: fullName, phone },
-            aud: 'authenticated',
-            created_at: new Date().toISOString()
-        } as any;
-
-        localStorage.setItem('MOCK_CURRENT_USER', JSON.stringify(mockUser));
-        setUser(mockUser);
-        return { error: null };
     };
 
     const signOut = async () => {
-        localStorage.removeItem('MOCK_CURRENT_USER');
-        setUser(null);
+        await supabase.auth.signOut();
     };
 
     return (
