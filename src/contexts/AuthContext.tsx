@@ -19,15 +19,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
+        const adminStr = localStorage.getItem('MOCK_ADMIN_USER');
+        if (adminStr) {
+            setUser(JSON.parse(adminStr));
             setLoading(false);
-        });
+        } else {
+            // Get initial session
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                setSession(session);
+                setUser(session?.user ?? null);
+                setLoading(false);
+            });
+        }
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (localStorage.getItem('MOCK_ADMIN_USER')) return;
             setSession(session);
             setUser(session?.user ?? null);
             setLoading(false);
@@ -37,6 +44,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const signIn = async (email: string, password: string) => {
+        if (email === 'admin@admin.com' && password === 'admin123') {
+            const mockAdminUser: User = {
+                id: 'admin_mock_id',
+                email: 'admin@admin.com',
+                app_metadata: {},
+                user_metadata: { full_name: '超级管理员', phone: '13888888888' },
+                aud: 'authenticated',
+                created_at: new Date().toISOString()
+            } as any;
+            localStorage.setItem('MOCK_ADMIN_USER', JSON.stringify(mockAdminUser));
+            setUser(mockAdminUser);
+            return { error: null };
+        }
+
         try {
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             return { error: error?.message ?? null };
@@ -69,6 +90,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const signOut = async () => {
+        if (localStorage.getItem('MOCK_ADMIN_USER')) {
+            localStorage.removeItem('MOCK_ADMIN_USER');
+            setUser(null);
+            return;
+        }
         await supabase.auth.signOut();
     };
 
