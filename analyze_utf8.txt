@@ -1,0 +1,61 @@
+﻿Analyzing pet...
+
+  error - lib\screens\home_screen.dart:52:37 - Illegal character '2538'. - illegal_character
+  error - lib\screens\home_screen.dart:52:37 - Undefined name '唰М'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+  error - lib\screens\home_screen.dart:52:38 - Illegal character '2542'. - illegal_character
+  error - lib\widgets\app_theme.dart:33:9 - The named parameter 'backgroundColor' isn't defined. Try correcting the name to an existing named parameter's name, or defining a named parameter with the name 'backgroundColor'. - undefined_named_parameter
+  error - lib\widgets\app_theme.dart:34:9 - The named parameter 'elevation' isn't defined. Try correcting the name to an existing named parameter's name, or defining a named parameter with the name 'elevation'. - undefined_named_parameter
+  error - lib\widgets\app_theme.dart:35:9 - The named parameter 'scrolledUnderElevation' isn't defined. Try correcting the name to an existing named parameter's name, or defining a named parameter with the name 'scrolledUnderElevation'. - undefined_named_parameter
+  error - lib\widgets\app_theme.dart:36:7 - Expected to find ';'. - expected_token
+  error - lib\widgets\app_theme.dart:36:8 - Expected an identifier. - missing_identifier
+  error - lib\widgets\app_theme.dart:36:8 - Unexpected text ';'. Try removing the text. - unexpected_token
+  error - lib\widgets\app_theme.dart:56:7 - Expected to find ';'. - expected_token
+  error - lib\widgets\app_theme.dart:56:8 - Expected an identifier. - missing_identifier
+  error - lib\widgets\app_theme.dart:56:8 - Unexpected text ';'. Try removing the text. - unexpected_token
+  error - lib\widgets\app_theme.dart:68:7 - Expected to find ';'. - expected_token
+  error - lib\widgets\app_theme.dart:68:8 - Expected an identifier. - missing_identifier
+  error - lib\widgets\app_theme.dart:68:8 - Expected to find ';'. - expected_token
+  error - lib\widgets\app_theme.dart:68:8 - Unexpected text ';'. Try removing the text. - unexpected_token
+  error - lib\widgets\app_theme.dart:69:5 - Expected an identifier. - missing_identifier
+  error - lib\widgets\app_theme.dart:69:5 - Unexpected text ';'. Try removing the text. - unexpected_token
+warning - lib\services\pet_service.dart:3:8 - Unused import: '../models/shelter.dart'. Try removing the import directive. - unused_import
+warning - lib\widgets\app_theme.dart:36:8 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\widgets\app_theme.dart:37:7 - The label 'inputDecorationTheme' isn't used. Try removing the label, or using it in either a 'break' or 'continue' statement. - unused_label
+warning - lib\widgets\app_theme.dart:57:7 - The label 'elevatedButtonTheme' isn't used. Try removing the label, or using it in either a 'break' or 'continue' statement. - unused_label
+   info - lib\screens\adoption_form_screen.dart:165:43 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\adoption_form_screen.dart:233:46 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\adoption_form_screen.dart:286:60 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\adoption_form_screen.dart:348:23 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\home_screen.dart:55:55 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\home_screen.dart:58:57 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\home_screen.dart:180:49 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\home_screen.dart:206:40 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\home_screen.dart:285:64 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\login_screen.dart:106:39 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:98:34 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:100:34 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:292:57 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:370:43 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:432:31 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\pet_detail_screen.dart:434:50 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:67:40 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:116:57 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:138:41 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:150:45 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:162:48 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\profile_screen.dart:189:46 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\register_screen.dart:109:37 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\upload_pet_screen.dart:143:37 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\upload_pet_screen.dart:183:50 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\screens\upload_pet_screen.dart:424:43 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\app_theme.dart:66:32 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\app_theme.dart:69:6 - Unnecessary empty statement. Try removing the empty statement or restructuring the code. - empty_statements
+   info - lib\widgets\app_theme.dart:115:32 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:29:35 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:68:46 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:69:46 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:100:50 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:104:55 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\widgets\pet_card.dart:155:45 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+
+57 issues found.

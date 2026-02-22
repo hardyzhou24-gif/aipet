@@ -1,60 +1,130 @@
-# 部署到 Vercel 指南
+# 宠物领养全端 App 项目运行与部署指南
 
-这个项目使用了 Vite + React + TypeScript 进行构建，非常适合部署到前端托管平台 Vercel 上。由于您的项目代码已经推送到了 GitHub，只需点按几次即可完成全自动的持续集成（CI/CD）部署。
+本项目作为一套包含核心功能还原的跨终端系统，经过 Flutter 的一次编写，现已完美抽离了 **Web (网页端)** 与 **Android (移动端)** 两套互相独立又统一的代码构建策略。
 
-下面是为您整理的极简部署步骤：
-
-## 1. 登录 Vercel
-
-1. 打开 [Vercel 官网](https://vercel.com/)。
-2. 点击右上角的 **Log In** 或 **Sign Up**。
-3. 选择 **Continue with GitHub**，并授权 Vercel 访问您的 GitHub 仓库。
-
-## 2. 导入您的 GitHub 仓库
-
-1. 登录成功后，在 Vercel 控制台 (Dashboard) 点击右上角的黑色按钮 **Add New...**，然后选择 **Project**。
-2. 在 "Import Git Repository" 列表中，找到您刚刚上传的项目 **`aipet`**。
-   - *(如果在列表中找不到，可能需要点击底部的 "Adjust GitHub App Permissions" 去 GitHub 给该仓库授权)*
-3. 找到后，点击它右侧的 **Import** 按钮。
-
-## 3. 配置部署选项
-
-在导入项目后的 Project Setup 页面，按以下说明确认配置，绝大部分 Vercel 会自动为您识别好：
-
-*   **Project Name**: \`aipet\` (保持默认即可)
-*   **Framework Preset**: 选择 **Vite** (Vercel 通常会自动探测出来)
-*   **Root Directory**: 保持为 \`./\`
-*   **Build and Output Settings** (保持默认):
-    *   Build Command: \`npm run build\`
-    *   Output Directory: \`dist\`
-    *   Install Command: \`npm install\`
-
-### 3.1 环境变量配置 (Environment Variables)
-
-尽管我们在代码中也加入了本地假数据的降级处理（Fallback），但如果您想让应用在线上尝试连接您准备好的真实 Supabase 数据库：
-
-1. 点击 **Environment Variables** 展开面板。
-2. 依次添加以下两条环境变量（它们原本存在于您的项目根目录的 \`.env.local\` 中，由于安全原因，它们并未被推送到 GitHub）。
-
-| Key | Value |
-| :--- | :--- |
-| \`VITE_SUPABASE_URL\` | [您的 Supabase URL 链接] |
-| \`VITE_SUPABASE_ANON_KEY\` | [您的 Supabase anon_key 密钥] |
-
-（注：如果没有填写这些变量也不影响应用的构建和线上运行，前端界面会自动使用本地预设的 Mock 动物数据做展示和验证。）
-
-## 4. 开始部署（Deploy）
-
-1. 配置完毕后，点击正下方的 **Deploy** 按钮。
-2. Vercel 将帮您自动获取代码、执行构建打包的流程（大约需要 30 秒至 1 分钟）。
-3. 部署完成后，屏幕会洒下礼花碎纸效果展示：🎉 **Congratulations!**
-
-## 5. 访问您的网站
-
-在恭喜页面的截图卡片处点击 **Continue to Dashboard**。在这个项目的面板上，您就可以看到 Vercel 给您自动分配的以 \`.vercel.app\` 结尾的线上访问公网链接了（例如 \`https://aipet.vercel.app\`）。
-
-您可以把这个链接直接发送到手机微信，或者分享给朋友。
+为了能更加合理、高效地进行功能的演示和上架，请按照以下文档顺序，先进行云端/本地服务的 Web 版本部署以确立服务器接口连通性，再进行移动端 App 的系统级测试。
 
 ---
 
-*💡 拓展：每次有新修改的代码，在终端执行 `git add .`、`git commit` 继而 `git push` 给到 GitHub，Vercel 只要检测到您的 GitHub 更新，就会在后台全自动热乎乎地重置部署一遍最新的网站！简直是完美组合！*
+## 0. 项目核心目录结构指南
+
+项目功能逻辑全部统一集中于 `lib/` 目录下，并以功能模块化划分：
+
+```text
+lib/
+├── config/       # 全局配置清单（例如 ApiConfig 接口常量映射表）
+├── models/       # 数据层抽象类模型 (Pet, Shelter 等)
+├── providers/    # 全局状态管理控制器 (基于 ChangeNotifier 的 Auth / Pet 拦截缓存)
+├── screens/      # 用户可见的屏幕端交互界面 (Home, Detail, Login, Adoption 申请等表单)
+├── services/     # 对接后端 Supabase 引擎的核心网络逻辑 (AuthService, PetService)
+├── widgets/      # 可高度复用与解耦的自定义组件 (自定义圆角输入框、统一骨架屏宠物卡片)
+└── main.dart     # 应用入口及路由配置注册器 (GoRouter)
+```
+
+---
+
+## 1. 基础环境与配置初始化
+
+无论您倾向验证 Web 还是 Android 打包，都需先确保本地已建立包含 Flutter SDK 的基础开发环境和 Supabase 配置关联。
+
+- **SDK 要求**: Flutter 3.24+ | Dart 3.5+
+- **安装依赖包**:
+  ```bash
+  flutter pub get
+  ```
+
+**配置 Supabase 环境变量**
+此项目的数据（宠物种类、收藏、用户 Auth 验证等）均由后端的 [Supabase](https://supabase.com/) 接管。
+在项目根目录下创建 `.env` 文件，内容如下：
+```env
+SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
+SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+> **备用降级机制**: 若此文件未被创建或远端 Supabase 无法握手，项目也会自动 Fallback （降级加载）内部集成的假数据（Mock Data）来保证页面排版不断裂。
+
+---
+
+## 2. 优先：Web 应用版的打包与部署验证
+
+鉴于 Web 网页的无痕性，强烈推荐首先进行 Web 应用验证所有业务逻辑和界面的表现形式。
+
+### 2.1 哪些接口与功能在 Web 端处于可用状态？
+目前代码的所有功能（无论 Web/App 层）完全对等，在 Web 端部署后，以下接口操作完全可用：
+1. **获取数据视图 (`pet_service.dart`)**：可根据分类过滤渲染首页瀑布流；可查阅详情大图及数据包中的避暑特征。
+2. **表单类操作 (`pet_service.dart`)**：多步式的领养申请表、包含本地浏览器照片上传的宠物发布。
+3. **用户认证体系 (`auth_service.dart`)**：可真实使用 Supabase Auth 发送 Email 以及登录，体验用户登入态和登出。如果不想注册，使用内部测试的管理员身份 `admin@admin.com` 和密码 `admin123` 即可绕过一切验证强制以登录态使用。
+
+### 2.2 构建静态 Web 网页
+使用以下命令行指令开始项目的全量 Tree-shaking 和构建（时间约两分钟）：
+```bash
+flutter build web --release 
+```
+
+### 2.3 Web 的宿主与一键部署方案
+Flutter 编译 Web 后的完全产出处于 `build/web/` 目录中。它其实就是个没有任何服务器语言依赖的纯前端 SPA (单页面应用程序) 压缩包。
+
+**简单预览（本地预览推荐）**
+使用 Python 临时启动：
+```bash
+cd build/web
+python -m http.server 8080
+```
+或使用 Node 环境的 serve：
+```bash
+npx serve build/web
+```
+此时在浏览器访问 `localhost:8080` 或指定端口即可。
+
+**生产级部署 (Nginx / Vercel)**
+由于 SPA 本质，如果您想要发布至公网服务器，对于包含路由重定向（GoRouter 驱动的如 `/pet/123`, `/login` 路径）防止 404 的问题：
+      }
+  }
+  ```
+
+**一键托管服务部署 (以 Vercel 为例教程)**
+如果您打算在 Vercel 自动化构建并代理这款 Web 单页面应用：
+
+1. **准备配置文件**: 在您的项目根目录下新建一个名为 `vercel.json` 的文件，填入如下内容进行全局路由重写，以彻底解决用户直接访问非 `/` 路径时引起的由于 Flutter 托管产生的 `404 Not Found` 错误：
+   ```json
+   {
+     "rewrites": [
+       {
+         "source": "/(.*)",
+         "destination": "/index.html"
+       }
+     ]
+   }
+   ```
+2. **通过平台关联提交**:
+   - 将本项目上传同步至您个人的 GitHub 仓库。
+   - 打开 Vercel 面板，点击 `Add New Project`，导入当前代码库。
+   - **Framework Preset**: 选择 `Other` 。
+   - **Build Command**: 填写 `flutter build web --release` 。
+   - **Output Directory**: 填写 `build/web` 。
+   - **Environment Variables**: 把您本地的 `.env` 内容即 `SUPABASE_URL` 和 `SUPABASE_ANON_KEY` 分列加入进去。
+3. **点击 Deploy**: 稍等几分钟，Vercel 将全权帮您自动化产出并绑定到一个可供世界上任何人访问的安全 HTTPS 域名上。
+
+---
+
+## 3. 进阶：Android App 端的打包与真机测试
+
+如果 Web 版测试一切表现优良，即证明远端环境与 UI 结构皆无问题。此时我们可以将其原封不动地移植至原生操作系统的 App 内。
+
+### 3.1 前置检查
+编译安卓应用相比 Web 开发要求大量诸如 Gradle 与 Java 环境参与：
+请确保通过 `flutter doctor -v` 检查到 `Android toolchain` 打全了勾（包含 Android SDK、NDK 及同意相关授权等）。
+
+### 3.2 编译与产出
+在包含 Android SDK 环境加持的终端里，发出构建指令：
+```bash
+flutter build apk --release
+```
+如果顺利，系统将自动利用自带的 `assembleRelease` 脚手架帮项目自动签名（调试指纹），最终会在本地产生一个单独的安装包文件，其地址位于：
+`build/app/outputs/flutter-apk/app-release.apk`
+
+### 3.3 部署与安装安卓真机
+不同于 Web 端需要寻找可对外开放的服务器托管机，APK 测试主要围绕分发：
+1. **开发连线安装**：将手机打开「开发者模式的 USB 调试」，连上电脑直接执行 `flutter install`。
+2. **三方平台发布分发**：直接将输出的 `app-release.apk` 发送至目标手机并安装，您也可以把该文件上传至各大蒲公英云盘方便用户独立下载。
+
+> 提示：Android 端的操作接口体验和 Web 端是高度对齐的，所有的滚动、回弹等手势动画会根据安卓原生 Material 系统自动获得优化和转换。
